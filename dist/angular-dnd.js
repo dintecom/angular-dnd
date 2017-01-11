@@ -602,9 +602,17 @@ extend($.prototype, {
         var ret, position, parents = this.dndClosest();
         var self = this[0];
 
+        var selfIndex = parents.index(self);
+        if (selfIndex >= 0) {
+            if ($(self).hasClass("angular-dnd-resizable-handle")) {
+                selfIndex++;
+            }
+            parents.splice(0, selfIndex + 1);
+        }
+
         var parentExists = false;
         forEach(parents, function(element) {
-            if (!parentExists && element !== self) {
+            if (!parentExists) {
                 position = $(element).dndCss('position');
 
                 if (position === 'absolute' || position === 'relative' || position === 'fixed') {
@@ -2233,7 +2241,7 @@ module.directive('dndResizable', ['$parse', '$timeout', function($parse, $timeou
                 local.inverseRotateMatrix = local.rotateMatrix.inverse();
                 local.parentRect = local.$parent.dndClientRect();
 
-                var axis = api.getBorderedAxis(), crect = $el.dndClientRect(), srect = local.rect = $el.dndStyleRect();
+                var axis = api.getRelBorderedAxis(), crect = $el.dndClientRect(), srect = local.rect = $el.dndStyleRect();
 
                 local.borders = api.getBorders();
                 local.startAxis = axis;
@@ -2260,7 +2268,7 @@ module.directive('dndResizable', ['$parse', '$timeout', function($parse, $timeou
 
                 if (!local.started) return;
 
-                var axis = api.getBorderedAxis();
+                var axis = api.getRelBorderedAxis();
                 var vector = Point(axis).minus(local.startAxis).transform(local.inverseRotateMatrix);
 
                 var scale = {x:1,y:1};

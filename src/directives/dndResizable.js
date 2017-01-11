@@ -52,7 +52,7 @@ module.directive('dndResizable', ['$parse', '$timeout', function($parse, $timeou
                 local.inverseRotateMatrix = local.rotateMatrix.inverse();
                 local.parentRect = local.$parent.dndClientRect();
 
-                var axis = api.getBorderedAxis(), crect = $el.dndClientRect(), srect = local.rect = $el.dndStyleRect();
+                var axis = api.getRelBorderedAxis(), crect = $el.dndClientRect(), srect = local.rect = $el.dndStyleRect();
 
                 local.borders = api.getBorders();
                 local.startAxis = axis;
@@ -79,7 +79,7 @@ module.directive('dndResizable', ['$parse', '$timeout', function($parse, $timeou
 
                 if (!local.started) return;
 
-                var axis = api.getBorderedAxis();
+                var axis = api.getRelBorderedAxis();
                 var vector = Point(axis).minus(local.startAxis).transform(local.inverseRotateMatrix);
 
                 var scale = {x:1,y:1};
