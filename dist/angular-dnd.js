@@ -600,14 +600,17 @@ extend($.prototype, {
 
     dndGetFirstNotStaticParent: function() {
         var ret, position, parents = this.dndClosest();
+        var self = this[0];
 
+        var parentExists = false;
         forEach(parents, function(element) {
+            if (!parentExists && element !== self) {
+                position = $(element).dndCss('position');
 
-            position = $(element).dndCss('position');
-
-            if ( position === 'absolute' || position === 'relative' || position === 'fixed' ) {
-                ret = element;
-                return false;
+                if (position === 'absolute' || position === 'relative' || position === 'fixed') {
+                    ret = element;
+                    parentExists = true;
+                }
             }
         });
 
